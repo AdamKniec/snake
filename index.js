@@ -11,27 +11,32 @@ let score = 0;
 let tail = [];
 let scoreBoard = [];
 // const colors = ['yellow','blue', 'brown', 'pink'];
+let colors = ['pink'];
 
-
-let colors = ['brown'];
-
+userModifiers = {
+    speedSelectHandle: () => {
+        snakeSpeed = parseInt(userSpeedSelect.value);
+    },
+    powerUpDurationHandle: () => {
+        powerUpDuration = parseInt(userDurationSelect.value);
+    },
+    multiplierHandler: () => {
+        userMultiplier = parseInt(userMultiplierSelect.value); 
+    }
+}
 
 let userSpeedSelect = document.querySelector('.speedSelect');
-    userSpeedSelect.addEventListener('change',
-        function(){
-        snakeSpeed = userSpeedSelect.value
-    });
-let snakeSpeed = userSpeedSelect.value;
-
-
+    userSpeedSelect.addEventListener('change', userModifiers.speedSelectHandle);
+let snakeSpeed = parseInt(userSpeedSelect.value);
 
 let userDurationSelect = document.querySelector('.powerUpDuration');
-console.log(userDurationSelect.value);
-userDurationSelect.addEventListener('change', function(){
-    powerUpDuration = userDurationSelect.value;
-})
+    userDurationSelect.addEventListener('change', userModifiers.powerUpDurationHandle);
+
+let userMultiplierSelect = document.querySelector('.multiplierValue');
+    userMultiplierSelect.addEventListener('change', userModifiers.multiplierHandler);
+
 let powerUpDuration = 0;
-let userMultiplier= 4;
+let userMultiplier = 1;
 
 
 
@@ -102,23 +107,27 @@ class Snake {
                 console.log('yellow eaten')
             // przyspieszamy węgorza
             } else if(context.fillStyle === "#0000ff") {
+                snakeSpeed -= 30;
+                console.log(snakeSpeed)
                 setTimeout(() => {
-                    snakeSpeed = 100;
+                    snakeSpeed = parseInt(userSpeedSelect.value);
+                    console.log(snakeSpeed)
                 }, powerUpDuration);
-                snakeSpeed = 50;
+                // snakeSpeed = 50;
                 console.log('blue');
             //spowalniamy węgorza
             } else if(context.fillStyle === "#a52a2a") {
+                snakeSpeed += 50;
                 setTimeout(() => {
-                    snakeSpeed = 100;
+                    snakeSpeed = parseInt(userSpeedSelect.value);
                 }, powerUpDuration);
-                snakeSpeed = 250;
                 console.log('brown')
             //przedluzenie ogonka
             } else if((context.fillStyle === '#ffc0cb')) {
                 for (let i = 0; i < userMultiplier; i++) {
                     score ++;
                     this.update();
+                    console.log(score);
                 }
                 
                 console.log('pink')
@@ -192,8 +201,6 @@ function renderScore(){
     snake = new Snake();
     fruit = new Fruit();
     fruit.getPosition();
-    // level = new Levels();
-    // bonusFruit = new BonusFruit();
     renderScore();
     function loop(){
         context.clearRect(0,0, canvasBoard.width, canvasBoard.height);
@@ -207,8 +214,8 @@ function renderScore(){
         window.setTimeout(loop, snakeSpeed);
 
     }
-loop();
-}())
+    loop();
+}());
 
 window.addEventListener('keydown', detectTheKey);
 function detectTheKey(e) {
