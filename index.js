@@ -1,19 +1,21 @@
 // Required variables
 const canvasBoard = document.querySelector('.canvas');
 let snake;
-let context = canvasBoard.getContext('2d');
-let scale = 10;
-let rows =  canvasBoard.height / scale;
-let columns = canvasBoard.width / scale;
+const context = canvasBoard.getContext('2d');
+const scale = 10;
+const rows =  canvasBoard.height / scale;
+const columns = canvasBoard.width / scale;
 let xSpeed = scale;
 let ySpeed = 0;
 let score = 0;
 let tail = [];
 let scoreBoard = [];
-// let colors = ['red', 'yellow', 'white', 'blue', 'brown', 'pink'];
+// const colors = ['yellow','blue', 'brown', 'pink'];
 
 
 let colors = ['brown'];
+
+
 let userSpeedSelect = document.querySelector('.speedSelect');
     userSpeedSelect.addEventListener('change',
         function(){
@@ -30,6 +32,8 @@ userDurationSelect.addEventListener('change', function(){
 })
 let powerUpDuration = 0;
 let userMultiplier= 4;
+
+
 
 // Snake class, it's design and behaviour
 class Snake {
@@ -95,34 +99,36 @@ class Snake {
             if(context.fillStyle === "#ffff00"){
                 score --;
                 tail.pop();
+                console.log('yellow eaten')
             // przyspieszamy węgorza
             } else if(context.fillStyle === "#0000ff") {
                 setTimeout(() => {
                     snakeSpeed = 100;
                 }, powerUpDuration);
                 snakeSpeed = 50;
+                console.log('blue');
             //spowalniamy węgorza
             } else if(context.fillStyle === "#a52a2a") {
                 setTimeout(() => {
                     snakeSpeed = 100;
                 }, powerUpDuration);
                 snakeSpeed = 250;
+                console.log('brown')
             //przedluzenie ogonka
             } else if((context.fillStyle === '#ffc0cb')) {
                 for (let i = 0; i < userMultiplier; i++) {
                     score ++;
                     this.update();
                 }
+                
+                console.log('pink')
             } else if(context.fillStyle === '#ffffff') {
                 for (let i = 0; i < userMultiplier; i++) {
-                    // tail.pop();
-                    // tail.update();
+                    // ?
                 }
-                
             } else {
                 score ++;        
             }
-            
             console.log(score);
             return true;
         }
@@ -138,10 +144,9 @@ class Snake {
         }
     }
     submitScore(){
-
         scoreBoard.push(score);
-            sessionStorage.setItem('Wyniki', scoreBoard);            
-            renderScore();
+        sessionStorage.setItem('Wyniki', scoreBoard);            
+        renderScore();
     }
 }
 
@@ -158,19 +163,12 @@ class Fruit {
     draw(){
         context.fillStyle = 'green';
         context.fillRect(this.x, this.y, scale,scale);
-
         if(score % 5 === 0 && score !== 0) {
-  
             context.fillStyle = `${colors[Math.floor(Math.random() * colors.length)]}`;
             context.fillRect(this.x, this.y, scale,scale);
-
             console.log(score)
-}
-
-
+        }
     }
-    
-
 }
 
 function renderScore(){
@@ -194,12 +192,12 @@ function renderScore(){
     snake = new Snake();
     fruit = new Fruit();
     fruit.getPosition();
+    // level = new Levels();
     // bonusFruit = new BonusFruit();
     renderScore();
     function loop(){
-        context.clearRect(0,0, canvasBoard.width, canvasBoard.height)
-        
-
+        context.clearRect(0,0, canvasBoard.width, canvasBoard.height);
+        // level.generateFirst();
         snake.draw();
         snake.update();
         fruit.draw();
