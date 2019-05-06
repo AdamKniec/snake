@@ -1,4 +1,4 @@
-// Required variables
+
 const canvasBoard = document.querySelector('.canvas');
 let snake;
 const context = canvasBoard.getContext('2d');
@@ -98,29 +98,28 @@ class Snake {
 
     eat(fruit){
         if(this.x === fruit.x && this.y === fruit.y) {
+            // making snake shorter
             if(context.fillStyle === "#ffff00"){
                 score --;
                 tail.pop();
+            // making the snake faster
             } else if(context.fillStyle === "#0000ff") {
                 snakeSpeed -= 30;
                 setTimeout(() => {
                     snakeSpeed = parseInt(userSpeedSelect.value);
                 }, powerUpDuration);
-                // snakeSpeed = 50;
-            //spowalniamy węgorza
+            // making the snake slower
             } else if(context.fillStyle === "#a52a2a") {
                 snakeSpeed += 50;
                 setTimeout(() => {
                     snakeSpeed = parseInt(userSpeedSelect.value);
                 }, powerUpDuration);
-            //przedluzenie ogonka
+            // adding some ammount of points
             } else if((context.fillStyle === '#ffc0cb')) {
                 for (let i = 0; i < userMultiplier; i++) {
                     score ++;
                     this.update();
                 }
-                
-                console.log('pink')
             } else {
                 score ++;        
             }
@@ -128,6 +127,7 @@ class Snake {
         }
         false;
     }
+    // checking if you ate your own tail
     collisionCheck() {
         for(let i = 0; i< tail.length; i++) {
             if(this.x === tail[i].x && this.y === tail[i].y) {
@@ -162,7 +162,7 @@ class Fruit {
         }
     }
 }
-
+// getting the scores from the session storage, sorting it and creating a template string to display the list
 function renderScore(){
     let data = sessionStorage.getItem('Wyniki');
     if(data) {
