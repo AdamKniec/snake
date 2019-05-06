@@ -10,8 +10,7 @@ let ySpeed = 0;
 let score = 0;
 let tail = [];
 let scoreBoard = [];
-// const colors = ['yellow','blue', 'brown', 'pink'];
-let colors = ['pink'];
+const colors = ['yellow','blue', 'brown', 'pink'];
 
 userModifiers = {
     speedSelectHandle: () => {
@@ -38,9 +37,6 @@ let userMultiplierSelect = document.querySelector('.multiplierValue');
 let powerUpDuration = 0;
 let userMultiplier = 1;
 
-
-
-// Snake class, it's design and behaviour
 class Snake {
     constructor(){
         this.x = 0;
@@ -78,6 +74,7 @@ class Snake {
         if (this.x < 0)
             this.x = canvasBoard.width;
         }
+
     changeDirection(direction) {
         switch(direction) {
             case 'ArrowDown': 
@@ -98,47 +95,35 @@ class Snake {
                 break;
         }
     }
+
     eat(fruit){
         if(this.x === fruit.x && this.y === fruit.y) {
-            // ucinamy ogonek
             if(context.fillStyle === "#ffff00"){
                 score --;
                 tail.pop();
-                console.log('yellow eaten')
-            // przyspieszamy węgorza
             } else if(context.fillStyle === "#0000ff") {
                 snakeSpeed -= 30;
-                console.log(snakeSpeed)
                 setTimeout(() => {
                     snakeSpeed = parseInt(userSpeedSelect.value);
-                    console.log(snakeSpeed)
                 }, powerUpDuration);
                 // snakeSpeed = 50;
-                console.log('blue');
             //spowalniamy węgorza
             } else if(context.fillStyle === "#a52a2a") {
                 snakeSpeed += 50;
                 setTimeout(() => {
                     snakeSpeed = parseInt(userSpeedSelect.value);
                 }, powerUpDuration);
-                console.log('brown')
             //przedluzenie ogonka
             } else if((context.fillStyle === '#ffc0cb')) {
                 for (let i = 0; i < userMultiplier; i++) {
                     score ++;
                     this.update();
-                    console.log(score);
                 }
                 
                 console.log('pink')
-            } else if(context.fillStyle === '#ffffff') {
-                for (let i = 0; i < userMultiplier; i++) {
-                    // ?
-                }
             } else {
                 score ++;        
             }
-            console.log(score);
             return true;
         }
         false;
@@ -159,7 +144,6 @@ class Snake {
     }
 }
 
-
 class Fruit {
     constructor(){
         this.x;
@@ -175,7 +159,6 @@ class Fruit {
         if(score % 5 === 0 && score !== 0) {
             context.fillStyle = `${colors[Math.floor(Math.random() * colors.length)]}`;
             context.fillRect(this.x, this.y, scale,scale);
-            console.log(score)
         }
     }
 }
@@ -204,15 +187,12 @@ function renderScore(){
     renderScore();
     function loop(){
         context.clearRect(0,0, canvasBoard.width, canvasBoard.height);
-        // level.generateFirst();
         snake.draw();
         snake.update();
         fruit.draw();
         snake.eat(fruit) ? fruit.getPosition() : null;
-        
         snake.collisionCheck();
         window.setTimeout(loop, snakeSpeed);
-
     }
     loop();
 }());
